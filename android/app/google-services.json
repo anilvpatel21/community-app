@@ -1,0 +1,77 @@
+{
+  "project_info": {
+    "project_number": "217368353155",
+    "firebase_url": "https://raipur-251536.firebaseio.com",
+    "project_id": "raipur-251536",
+    "storage_bucket": "raipur-251536.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217368353155:android:19e997efcc8830dd",
+        "android_client_info": {
+          "package_name": "com.kkppatidar.patidar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "217368353155-dfs120nabtbru7vmfcn00ravejubbc1l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBV5SD-jDC_sWcD3I2KUd2Cv8lkgSrM_4Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "217368353155-dfs120nabtbru7vmfcn00ravejubbc1l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217368353155:android:f1c5dca30c75e7ed05beb6",
+        "android_client_info": {
+          "package_name": "com.raipurkkpsamaj"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "217368353155-9i7fcl8385r0taj9md5654k9qrnuefbk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.raipurkkpsamaj",
+            "certificate_hash": "8d6206e680d95742b378ca2ba4b3dfb8f9a746b1"
+          }
+        },
+        {
+          "client_id": "217368353155-dfs120nabtbru7vmfcn00ravejubbc1l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBV5SD-jDC_sWcD3I2KUd2Cv8lkgSrM_4Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "217368353155-dfs120nabtbru7vmfcn00ravejubbc1l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

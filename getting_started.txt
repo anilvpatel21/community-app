@@ -1,0 +1,43 @@
+Node v12.6.1
+JDK 8 >
+watchman --- is a tool by Facebook for watching changes in the filesystem.
+Android SDK
+Android SDK Platform
+Android Virtual Device
+    Android 10 (Q) SDK
+    --
+        Android SDK Platform 29
+        Intel x86 Atom_64 System Image or Google APIs Intel x86 Atom System Image
+
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/emulator -> its import for virtual phone
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+
+Rather than install and manage a specific version of the CLI globally,
+we recommend you access the current version at runtime using npx
+
+npx react-native start
+npx react-native run-android
+
+To have an internet access into the emulator, open an emulator with
+To check list of emulator
+cd ~/Library/Android/sdk/tools
+emulator -list-avds
+
+emulator -avd Pixel_2_API_28 -dns-server 8.8.8.8
+
+
+Follow this link for Firebase OTP Authnetication
+https://www.section.io/engineering-education/react-native-firebase-phone-authentication/#setting-up-the-firebase-project
+
+Follow this for release
+https://reactnative.dev/docs/signed-apk-android
+
+For SSL ---- ZeroSSL LetsEncrpty
+https://dev.to/atomar/let-s-encrypt-ssl-certificate-in-namecheap-autorenewal-verified-working-using-acme-sh-4m7i
+
+For React Native FCM
+https://medium.com/@anum.amin/react-native-integrating-push-notifications-using-fcm-349fff071591
