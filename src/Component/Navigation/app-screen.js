@@ -97,12 +97,14 @@ export default function HomeScreenRouter(props) {
     }
 
     const onNotification = (notify) => {
-        Alert.alert('A new FCM message arrived!', JSON.stringify(notify));
-        console.log("[NotificationFCM] onNotification", notify);
+        if(notify) {
+            Alert.alert('Notification', notify.notification.body + '\n\n' + notify.notification.title);
+        }
+        //console.log("[NotificationFCM] onNotification", notify);
     }
 
     const onOpenNotification = (notify) => {
-        console.log("[NotificationFCM] onOpenNotification", notify);
+        //console.log("[NotificationFCM] onOpenNotification", notify);
     }
 
     function Root() {

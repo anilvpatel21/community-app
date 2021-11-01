@@ -1,4 +1,4 @@
-import { Box, Text, ScrollView, VStack, Input, FormControl, KeyboardAvoidingView, CheckIcon, TextArea, Button, Heading, Spinner, Modal, Select } from 'native-base';
+import { Box, Text, ScrollView, VStack, Input, Radio, FormControl, KeyboardAvoidingView, CheckIcon, TextArea, Button, Heading, Spinner, Modal, Select, HStack } from 'native-base';
 import { ToastAndroid, Image, Dimensions, Alert, BackHandler } from 'react-native';
 import dataService, { backendUrl, apiEndPoints } from '../../Services/NetworkServices';
 import React, { Component } from 'react';
@@ -15,7 +15,9 @@ export default class PostEvents extends Component {
                 location: '',
                 message: '',
                 photo: '',
-                type: 'RIP'
+                type: 'RIP',
+                isCommentAllowed: "0",
+                sendNotification: "0"
             },
             types: [],
             height: 0,
@@ -29,17 +31,17 @@ export default class PostEvents extends Component {
         this._isMounted = true;
 
         dataService.get(apiEndPoints.types, {}, {})
-        .then((res) => {
-            if (res.internetStatus && res.data) {
-                if (this._isMounted) {
-                    this.setState({
-                        types: res.data.data
-                    })
+            .then((res) => {
+                if (res.internetStatus && res.data) {
+                    if (this._isMounted) {
+                        this.setState({
+                            types: res.data.data
+                        })
+                    }
                 }
-            }
-        }).catch((err) => {
-            dataService.bottomToastMessage(err.message)
-        })
+            }).catch((err) => {
+                dataService.bottomToastMessage(err.message)
+            })
     }
 
     componentWillUnmount() {
@@ -47,9 +49,9 @@ export default class PostEvents extends Component {
     }
 
     setFormControl = (id, value) => {
-        let { data } =this.state;
+        let { data } = this.state;
         data[id] = value;
-        if(this._isMounted) {
+        if (this._isMounted) {
             this.setState({
                 data: data
             })
@@ -68,7 +70,7 @@ export default class PostEvents extends Component {
     }
 
     submitPhoto = async () => {
-        const { title, location, message, photo, type } = this.state.data;
+        const { title, location, message, photo, type, isCommentAllowed, sendNotification } = this.state.data;
         if (this.validation() && this._isMounted) {
             let imgBase64;
             await ImgToBase64.getBase64String(photo)
@@ -85,6 +87,8 @@ export default class PostEvents extends Component {
             formData.append('location', location);
             formData.append('type', type);
             formData.append('photo', imgBase64);
+            formData.append('isCommentAllowed', isCommentAllowed);
+            formData.append('sendNotification', sendNotification);
 
             this.setState({
                 loading: true,
@@ -105,6 +109,7 @@ export default class PostEvents extends Component {
                                 status: 'Uploaded Successfully...'
                             });
                             dataService.bottomToastMessage('Uploaded Successfully...');
+                            dataService.bottomToastMessage(res.data.message);
                             this.props.navigation.navigate('Main', {
                                 forceUpdate: true
                             });
@@ -131,7 +136,7 @@ export default class PostEvents extends Component {
     }
 
     updateSize = (height) => {
-        if(this._isMounted) {
+        if (this._isMounted) {
             this.setState({
                 height: (height < 100) ? 100 : height + 10
             });
@@ -140,7 +145,7 @@ export default class PostEvents extends Component {
 
     render() {
         const { types, loading, status } = this.state;
-        let { title, location, message, height, type } = this.state.data;
+        let { title, location, message, height, type, isCommentAllowed, sendNotification } = this.state.data;
         return (
             <ScrollView>
                 <Box
@@ -152,7 +157,7 @@ export default class PostEvents extends Component {
                         <Modal
                             isOpen={loading}
                             onClose={() => {
-                                if(this._isMounted) {
+                                if (this._isMounted) {
                                     this.setState({
                                         loading: false
                                     })
@@ -207,7 +212,23 @@ export default class PostEvents extends Component {
                                         return <Select.Item key={index} label={type.name} value={type.name} />
                                     })}
                                 </Select>
-
+                            </FormControl>
+                            <FormControl mt={3}>
+                                <FormControl.Label>Allowed Comments:</FormControl.Label>
+                                <Radio.Group
+                                    name="isCommentAllowed"
+                                    value={isCommentAllowed}
+                                    onChange={(nextValue) => this.setFormControl('isCommentAllowed',nextValue)}
+                                >
+                                    <HStack space={20}>
+                                        <Radio value="1" my={1}>
+                                            Yes
+                                        </Radio>
+                                        <Radio value="0" my={1}>
+                                            No
+                                        </Radio>
+                                    </HStack>
+                                </Radio.Group>
                             </FormControl>
                             <FormControl mt={3}>
                                 <FormControl.Label >Message</FormControl.Label>
@@ -220,6 +241,23 @@ export default class PostEvents extends Component {
                                     onChangeText={(value) => this.setFormControl('message', value)}
                                     onContentSizeChange={(e) => this.updateSize(e.nativeEvent.contentSize.height)}
                                 />
+                            </FormControl>
+                            <FormControl mt={3}>
+                                <FormControl.Label>Send Notification (Immediately):</FormControl.Label>
+                                <Radio.Group
+                                    name="sendNotification"
+                                    value={sendNotification}
+                                    onChange={(nextValue) => this.setFormControl('sendNotification',nextValue)}
+                                >
+                                    <HStack space={20}>
+                                        <Radio value="1" my={1}>
+                                            Yes
+                                        </Radio>
+                                        <Radio value="0" my={1}>
+                                            No
+                                        </Radio>
+                                    </HStack>
+                                </Radio.Group>
                             </FormControl>
                             <FormControl.Label mt={3}>Photo:</FormControl.Label>
                             <UploadPhoto

@@ -63,7 +63,10 @@ class FCMSerivce {
         this.notificationOpenedListener = messaging()
         .onNotificationOpenedApp((notificationOpen: NotificationOpen) => {
             //alert('aaya onNotificationOpenedApp');
-            onOpenNotification(notificationOpen);
+            if (notificationOpen) {
+                const notification: Notification = notificationOpen.notification;
+                onOpenNotification(notification);
+            }
         })
 
 

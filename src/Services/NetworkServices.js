@@ -16,7 +16,8 @@ export const apiEndPoints = {
    members: '/members',
    events: '/events',
    comments: '/comments',
-   types: '/types'
+   types: '/types',
+   pushNotification: '/pushevents'
 }
 
 const getIn = function (keyList) {

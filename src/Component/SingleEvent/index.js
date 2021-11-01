@@ -5,8 +5,9 @@ import Card from '../Elements/Card';
 import Comments from '../Elements/Comments';
 import CommentBox from '../Elements/Comments/box';
 import dataService, { apiEndPoints } from '../../Services/NetworkServices';
+import { AuthContext } from '../../Provider/authProvider';
 
-export default class SingleEvent extends Component {
+class SingleEvent extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -37,12 +38,12 @@ export default class SingleEvent extends Component {
     }
 
     fetchComments = (pageNo, toStart) => {
-        if (this._isMounted) {
+        const { _event } = this.props.route.params;
+        if (this._isMounted && _event.isCommentAllowed == "1" ) {
             this.setState({
                 isLoading: true,
                 currentPage: pageNo
             })
-            const { _event } = this.props.route.params;
             dataService.get(apiEndPoints.comments, {}, {
                 params: {
                     page: pageNo,
@@ -97,6 +98,38 @@ export default class SingleEvent extends Component {
             }
         }
     }
+
+    sendNotification = (eventId) => {
+        dataService.post(apiEndPoints.pushNotification + '/' + eventId,{},{})
+        .then((res) => {
+            if(res.internetStatus && res.data) {
+                dataService.bottomToastMessage(res.data.message);
+            }
+        }).catch((err)=> {
+            dataService.bottomToastMessage(err.message)
+        })
+    }
+
+    sendNotificationConfirmation = (eventId) => {
+        Alert.alert(
+            'Are you sure want to send notification?',
+            '',
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => { },
+                    style: "cancel"
+                },
+                {
+                    text: "Sure",
+                    onPress: () => this.sendNotification(eventId),
+                }
+            ],
+            { cancelable: false }
+        )
+    }
+
+
 
     getLatest = () => {
         if (this._isMounted) {
@@ -170,20 +203,24 @@ export default class SingleEvent extends Component {
             <>
                 <FlatList
                     my={3}
-                    mb={"24"}
+                    mb={_event.isCommentAllowed == "1" ? "20" : 3}
                     onRefresh={this.getLatest}
                     refreshing={this.state.isRefreshing}
                     ListHeaderComponent={() => <>
-                        <Card _event={_event} />
-                        <Heading size={'md'} mx={3}>Comments:</Heading>
+                        <Card _event={_event}/>
+                        <HStack justifyContent="space-between" mx={3}>
+                            {_event.isCommentAllowed == "1" && <Heading size={'sm'}>Comments:</Heading>}
+                            {this.props.isAdmin == "1" && <Button size={'xs'} onPress={() => this.sendNotificationConfirmation(_event.id)}>Send Notification</Button>}
+                        </HStack>
+
                     </>}
                     ListFooterComponent={() => {
                         return (
                             <>
-                                {this.state.isLoading && <VStack height={100} alignItems="center" justifyContent="center">
+                                {_event.isCommentAllowed == "1" && this.state.isLoading && <VStack height={100} alignItems="center" justifyContent="center">
                                     <Spinner />
                                 </VStack>}
-                                {!this.state.isLoading && this.state.comments.length == 0 && <VStack height={100} alignItems="center" justifyContent="center">
+                                {_event.isCommentAllowed == "1" && !this.state.isLoading && this.state.comments.length == 0 && <VStack height={100} alignItems="center" justifyContent="center">
                                     <Text>No Comments</Text>
                                 </VStack>}
                             </>
@@ -198,8 +235,13 @@ export default class SingleEvent extends Component {
                     initialNumToRender={3}
                     maxToRenderPerBatch={3}
                 />
-                <CommentBox _event={_event} getLatest={this.getLatest} />
+                {_event.isCommentAllowed == "1" && <CommentBox _event={_event} getLatest={this.getLatest} />}
             </>
         )
     }
+}
+
+export default function Event(props) {
+    const { state:{ userToken }  } = useContext(AuthContext);
+    return <SingleEvent {...props} isAdmin={userToken.isAdmin} />
 }
