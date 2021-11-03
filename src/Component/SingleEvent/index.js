@@ -207,12 +207,10 @@ class SingleEvent extends Component {
                     onRefresh={this.getLatest}
                     refreshing={this.state.isRefreshing}
                     ListHeaderComponent={() => <>
-                        <Card _event={_event}/>
-                        <HStack justifyContent="space-between" mx={3}>
+                        <Card _event={_event} isAdmin={this.props.isAdmin} sNotifiyConfirm={this.sendNotificationConfirmation} />
+                        <HStack mx={3}>
                             {_event.isCommentAllowed == "1" && <Heading size={'sm'}>Comments:</Heading>}
-                            {this.props.isAdmin == "1" && <Button size={'xs'} onPress={() => this.sendNotificationConfirmation(_event.id)}>Send Notification</Button>}
                         </HStack>
-
                     </>}
                     ListFooterComponent={() => {
                         return (

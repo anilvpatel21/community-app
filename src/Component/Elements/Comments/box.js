@@ -66,8 +66,8 @@ export default function CommentBox(props) {
                     }}
                 />
             </FormControl>
-            <TouchableOpacity onPress={() => postMessage()}  style={{position: 'absolute', right: 20, top: 20 }}>
-                <Icon name="send" size={24}></Icon>
+            <TouchableOpacity onPress={() => postMessage()}  style={{position: 'absolute', right: 20, top: 20, zIndex: 10 }}>
+                <Icon name="send" style={{color: '#f59e0b'}} size={24}></Icon>
             </TouchableOpacity>
         </KeyboardAvoidingView>
     </Box>
