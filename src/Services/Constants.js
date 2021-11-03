@@ -17,7 +17,7 @@ class Constants {
         }
     };
     email = "anilpatel.gondia@gmail.com";
-    updateUrl = "https://play.google.com/store/apps/details?id=in.codebucket.gondiacityapp&hl=en";
+    updateUrl = "https://play.google.com/store/apps/details?id=com.raipurkkpsamaj&hl=en";
     getReportUrl({email = this.email, subject, body}) {
         return `mailto:${email}?subject=${subject}&body=${body}`;
     }

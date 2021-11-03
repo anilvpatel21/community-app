@@ -17,6 +17,7 @@ export const apiEndPoints = {
    events: '/events',
    comments: '/comments',
    types: '/types',
+   settings: '/settings',
    pushNotification: '/pushevents'
 }
 

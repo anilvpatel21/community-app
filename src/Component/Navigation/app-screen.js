@@ -28,7 +28,6 @@ const Stack = createStackNavigator();
 
 export default function HomeScreenRouter(props) {
 
-    const [once, setOnce] = React.useState(0);
     const { state:{ userToken }, setUpdateProfile }  = React.useContext(AuthContext);
 
     const isFocused = useIsFocused();
@@ -38,9 +37,8 @@ export default function HomeScreenRouter(props) {
     }
 
     React.useEffect(() => {
-        if (once == 0 && isFocused) {
+        if (isFocused) {
             fcmRegister();
-            setOnce(1);
         }
         return () => {
             fcmService.unRegister();
@@ -66,10 +64,28 @@ export default function HomeScreenRouter(props) {
         }
     }
 
+    const fetchSettings = () => {
+        dataService.get(apiEndPoints.settings,{},{})
+        .then((res) => {
+            if(res.internetStatus && res.data) {
+                if(res.data.data.length > 0) {
+                    const settings = res.data.data[0];
+                    const versionDiff = parseFloat(settings.currentVersion) - parseFloat(version);
+                    if(versionDiff > 0 && isFocused) {
+                        const forceUpdate = (versionDiff > 1 || settings.forceUpdate == "1");
+                        updateFunction(forceUpdate, settings.currentVersion)
+                    }
+                }
+            }
+        }).catch((err) => {
+            dataService.bottomToastMessage('error in settings ' + err.message);
+        })
+    }
+
     const updateFunction = (forceUpdate, versionNo) => {
         Alert.alert(
             `New version ${versionNo} of app is available.`,
-            "Hello Buddy, please update your app to continue enjoy our services.",
+            "Please update your app.",
             [
                 (!forceUpdate) ? {
                     text: "Cancel",
@@ -93,6 +109,7 @@ export default function HomeScreenRouter(props) {
             if(!userToken.fcmToken || userToken.fcmToken != token) {
                 sendFCMInformation(token);
             }
+            fetchSettings();
         }
     }
 
@@ -104,16 +121,10 @@ export default function HomeScreenRouter(props) {
     }
 
     const onOpenNotification = (notify) => {
+        if(notify) {
+            Alert.alert('Notification', notify.notification.body + '\n\n' + notify.notification.title);
+        }
         //console.log("[NotificationFCM] onOpenNotification", notify);
-    }
-
-    function Root() {
-        return (
-            <Drawer.Navigator drawerContent={props => <DrawerScreen {...props} />} initialRouteName={'Main'}>
-                <Drawer.Screen name="Main" component={Main} />
-                <Drawer.Screen name="Profile"  component={Profile} />
-            </Drawer.Navigator>
-        );
     }
 
     return (
@@ -135,5 +146,14 @@ export default function HomeScreenRouter(props) {
             <Stack.Screen name="Post" component={PostEvents} />
         </Stack.Navigator>
     )
+}
+
+function Root() {
+    return (
+        <Drawer.Navigator drawerContent={props => <DrawerScreen {...props} />} initialRouteName={'Main'}>
+            <Drawer.Screen name="Main" component={Main} />
+            <Drawer.Screen name="Profile"  component={Profile} />
+        </Drawer.Navigator>
+    );
 }
 

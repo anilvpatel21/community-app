@@ -36,6 +36,8 @@ https://www.section.io/engineering-education/react-native-firebase-phone-authent
 Follow this for release
 https://reactnative.dev/docs/signed-apk-android
 
+./gradlew assembleRelease
+
 For SSL ---- ZeroSSL LetsEncrpty
 https://dev.to/atomar/let-s-encrypt-ssl-certificate-in-namecheap-autorenewal-verified-working-using-acme-sh-4m7i
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNetInfo } from "@react-native-community/netinfo";
 import { Heading, Box, Text, Link, Stack, HStack, VStack, Center, Spinner, Input, FormControl, Button, ScrollView, Divider, Modal } from "native-base";
-import dataService, { apiEndPoints } from '../../Services/NetworkServices';
+import dataService, { apiEndPoints, publicUrl } from '../../Services/NetworkServices';
 import { validatePhoneNumber } from '../../Services/utility';
 
 
@@ -128,7 +128,7 @@ function PhoneSignIn(props) {
 
                 <Divider my={2} />
                 <HStack mt="5" alignItems="center">
-                    <Text>By continuing, you agree to our <Link onPress={() => props.navigation.navigate('Terms And Condition')} style={{ color: '#004080' }}>Terms of Service and Privacy Policy.</Link> </Text>
+                    <Text>By continuing, you agree to our <Link onPress={() => dataService.openExternalApp(publicUrl +'terms.html')} style={{ color: '#004080' }}>Terms of Service and Privacy Policy.</Link> </Text>
                 </HStack>
             </VStack>
         </Box >
